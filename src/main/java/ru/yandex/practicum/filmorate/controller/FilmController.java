@@ -75,7 +75,7 @@ public class FilmController {
         } else if (!films.containsKey(film.getId())) {
             throw new AbsentFilmWithThisIdException("Фильм с id " + film.getId() + " не найден");
         } else {
-            log.info("Обновлен фильм с id {}      {}", film.getId(), film);
+            log.info("обновлен фильм с id {}      {}", film.getId(), film);
             films.put(film.getId(), film);
             return film;
         }
