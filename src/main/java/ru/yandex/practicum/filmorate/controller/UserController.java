@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.userException.AbsentUserWithThisIdException;
 import ru.yandex.practicum.filmorate.exception.userException.InvalidBirthdayException;
 import ru.yandex.practicum.filmorate.exception.userException.InvalidEmailException;
 import ru.yandex.practicum.filmorate.exception.userException.InvalidLogUserException;
@@ -69,6 +70,8 @@ public class UserController {
         } else if (user.getBirthday().isAfter(LocalDate.now())) {
             log.info("дата рождения не может быть в будущем");
             throw new InvalidBirthdayException("дата рождения не может быть в будущем");
+        } else if (!users.containsKey(user.getId())) {
+            throw new AbsentUserWithThisIdException("пользватель с id " + user.getId() + " не найден");
         } else {
             if (user.getName() == null) {
                 user.setName(user.getLogin());
