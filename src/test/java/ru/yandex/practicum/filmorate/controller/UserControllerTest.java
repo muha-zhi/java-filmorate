@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.userException.InvalidBirthdayException;
 import ru.yandex.practicum.filmorate.exception.userException.InvalidEmailException;
@@ -70,7 +69,7 @@ class UserControllerTest {
 
     @Test
     void shouldReturnInvalidBirthdayException() {
-        User user =getUser();
+        User user = getUser();
         user.setBirthday(LocalDate.of(2025, 7, 12));
         final InvalidBirthdayException exception = assertThrows(
 
