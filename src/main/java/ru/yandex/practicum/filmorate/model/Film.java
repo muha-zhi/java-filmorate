@@ -1,23 +1,32 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
-@Builder
+
 @Data
 public class Film {
 
     @EqualsAndHashCode.Include
-    int id;
+    private long id;
 
-    String name;
+    private String name;
 
-    String description;
+    private String description;
 
-    LocalDate releaseDate;
+    private LocalDate releaseDate;
 
-    int duration;
+    private int duration;
+
+    private Set<Long> likesOfUsers = new HashSet<>();
+
+    public int getLikes() {
+        if (likesOfUsers != null) {
+            return likesOfUsers.size();
+        }
+        return 0;
+    }
 }

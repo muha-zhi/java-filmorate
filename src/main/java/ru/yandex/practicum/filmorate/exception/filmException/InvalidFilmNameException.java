@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.exception.filmException;
 
-public class InvalidFilmNameException extends Exception{
+import javax.validation.ValidationException;
+
+public class InvalidFilmNameException extends ValidationException {
     public InvalidFilmNameException() { super(); }
     public InvalidFilmNameException(String message) { super(message); }
     public InvalidFilmNameException(String message, Throwable cause) { super(message, cause); }

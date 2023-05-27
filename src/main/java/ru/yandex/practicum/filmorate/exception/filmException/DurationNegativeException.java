@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.exception.filmException;
 
-public class DurationNegativeException extends Exception{
+import javax.validation.ValidationException;
+
+public class DurationNegativeException extends ValidationException {
     public DurationNegativeException() { super(); }
     public DurationNegativeException(String message) { super(message); }
     public DurationNegativeException(String message, Throwable cause) { super(message, cause); }

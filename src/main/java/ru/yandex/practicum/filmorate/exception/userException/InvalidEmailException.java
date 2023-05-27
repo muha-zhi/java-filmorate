@@ -1,5 +1,8 @@
 package ru.yandex.practicum.filmorate.exception.userException;
-public class InvalidEmailException extends Exception{
+
+import javax.validation.ValidationException;
+
+public class InvalidEmailException extends ValidationException {
 
     public InvalidEmailException() { super(); }
     public InvalidEmailException(String message) { super(message); }

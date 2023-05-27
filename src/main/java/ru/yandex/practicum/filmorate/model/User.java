@@ -4,23 +4,30 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@Builder
 public class User {
 
-
-    int id;
+    @EqualsAndHashCode.Include
+    private long id;
     @Email
-    String email;
-    @EqualsAndHashCode.Exclude
+    private String email;
 
-    String login;
+    private String login;
 
-    @EqualsAndHashCode.Exclude
-    String name;
+    private String name;
 
-    @EqualsAndHashCode.Exclude
-    LocalDate birthday;
+    private LocalDate birthday;
+
+    private Set<Long> friends = new HashSet<>();
+
+    public void addFriend(long idOfFriend) {
+        if (friends != null) {
+            friends.add(idOfFriend);
+        }
+
+    }
 
 }
