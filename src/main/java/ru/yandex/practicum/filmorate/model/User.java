@@ -10,17 +10,16 @@ import java.time.LocalDate;
 public class User {
 
 
-    int id;
+   private int id;
     @Email
-    String email;
+   private String email;
     @EqualsAndHashCode.Exclude
-
-    String login;
-
-    @EqualsAndHashCode.Exclude
-    String name;
+   private String login;
 
     @EqualsAndHashCode.Exclude
-    LocalDate birthday;
+   private String name;
+
+    @EqualsAndHashCode.Exclude
+   private LocalDate birthday;
 
 }
