@@ -3,23 +3,26 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.exception.filmException.DescriptionMore200Characters;
-import ru.yandex.practicum.filmorate.exception.filmException.DurationNegativeException;
 import ru.yandex.practicum.filmorate.exception.filmException.FilmDateException;
-import ru.yandex.practicum.filmorate.exception.filmException.InvalidFilmNameException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class FilmControllerTest {
-    FilmController controller;
+    private FilmController controller;
+
+    private Validator validator;
 
     Film getFilm() {
         Film film = new Film();
@@ -35,6 +38,8 @@ class FilmControllerTest {
 
     @BeforeEach
     void afterEach() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
         controller = new FilmController(new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage()));
     }
 
@@ -88,11 +93,8 @@ class FilmControllerTest {
                 "оооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооо" +
                 "оооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооо");
 
-        final DescriptionMore200Characters exception = assertThrows(
-
-                DescriptionMore200Characters.class,
-                () -> controller.createFilm(film));
-        assertEquals("максимальная длина описания — 200 символов", exception.getMessage());
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertFalse(violations.isEmpty());
 
     }
 
@@ -101,11 +103,8 @@ class FilmControllerTest {
         Film film = getFilm();
         film.setDuration(-1);
 
-        final DurationNegativeException exception = assertThrows(
-
-                DurationNegativeException.class,
-                () -> controller.createFilm(film));
-        assertEquals("продолжительность фильма должна быть положительной", exception.getMessage());
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertFalse(violations.isEmpty());
 
     }
 
@@ -114,11 +113,8 @@ class FilmControllerTest {
         Film film = getFilm();
         film.setName("");
 
-        final InvalidFilmNameException exception = assertThrows(
-
-                InvalidFilmNameException.class,
-                () -> controller.createFilm(film));
-        assertEquals("Имя не может быть пустым", exception.getMessage());
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertFalse(violations.isEmpty());
 
     }
 

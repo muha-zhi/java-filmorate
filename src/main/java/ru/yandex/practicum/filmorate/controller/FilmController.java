@@ -1,14 +1,18 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 
 @RestController
+@Validated
 public class FilmController {
 
 
@@ -21,7 +25,7 @@ public class FilmController {
 
 
     @PostMapping("/films")
-    public Film createFilm(@RequestBody Film film) throws Exception {
+    public Film createFilm(@RequestBody @Valid Film film) throws Exception {
         return service.createFilm(film);
 
     }
@@ -32,7 +36,7 @@ public class FilmController {
     }
 
     @PutMapping("/films")
-    public Film updateFilm(@RequestBody Film film) throws Exception {
+    public Film updateFilm(@RequestBody @Valid Film film) throws Exception {
         return service.updateFilm(film);
     }
 
@@ -50,7 +54,7 @@ public class FilmController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getPopFilms(@RequestParam(defaultValue = "10", required = false) int count) {
+    public List<Film> getPopFilms(@RequestParam(defaultValue = "10") @Positive int count) {
         return service.getMostPopFilms(count);
     }
 

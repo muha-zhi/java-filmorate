@@ -4,20 +4,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.userException.InvalidBirthdayException;
-import ru.yandex.practicum.filmorate.exception.userException.InvalidEmailException;
-import ru.yandex.practicum.filmorate.exception.userException.InvalidLogUserException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserControllerTest {
-    UserController controller;
+    private UserController controller;
+
+    private Validator validator;
 
     User getUser() {
         User user = new User();
@@ -31,6 +35,8 @@ class UserControllerTest {
 
     @BeforeEach
     void beforeEach() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
         controller = new UserController(new UserService(new InMemoryUserStorage()));
     }
 
@@ -82,22 +88,16 @@ class UserControllerTest {
     void shouldReturnInvalidEmailException() {
         User user = getUser();
         user.setEmail("logangmail.com");
-        final InvalidEmailException exception = assertThrows(
-
-                InvalidEmailException.class,
-                () -> controller.createUser(user));
-        assertEquals("электронная почта не может быть пустой и должна содержать символ @", exception.getMessage());
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty());
     }
 
     @Test
     void shouldReturnInvalidLogUserException() {
         User user = getUser();
         user.setLogin("");
-        final InvalidLogUserException exception = assertThrows(
-
-                InvalidLogUserException.class,
-                () -> controller.createUser(user));
-        assertEquals("логин не может быть пустым и содержать пробелы", exception.getMessage());
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty());
     }
 
     @Test
