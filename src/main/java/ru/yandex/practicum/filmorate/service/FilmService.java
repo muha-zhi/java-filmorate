@@ -26,7 +26,7 @@ public class FilmService {
 
     private final UserStorage userStorage;
 
-    private final static LocalDate FILMS_BIRTHDAY = LocalDate.of(1895, 12, 28);
+    private final LocalDate FILMS_BIRTHDAY = LocalDate.of(1895, 12, 28);
 
 
     int idOfAll = 0;
