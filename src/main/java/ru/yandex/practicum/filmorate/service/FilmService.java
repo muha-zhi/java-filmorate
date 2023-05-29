@@ -26,7 +26,7 @@ public class FilmService {
 
     private final UserStorage userStorage;
 
-    private final LocalDate FILMS_BIRTHDAY = LocalDate.of(1895, 12, 28);
+    private final LocalDate filmsBirthday = LocalDate.of(1895, 12, 28);
 
 
     int idOfAll = 0;
@@ -144,6 +144,6 @@ public class FilmService {
     }
 
     public boolean isTrueFimDate(Film film) {
-        return film.getReleaseDate().isBefore(FILMS_BIRTHDAY);
+        return film.getReleaseDate().isBefore(filmsBirthday);
     }
 }
