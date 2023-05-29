@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.userException.AbsentUserWithThisIdException;
 import ru.yandex.practicum.filmorate.exception.userException.InvalidBirthdayException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import javax.validation.ValidationException;
@@ -18,19 +17,16 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    UserStorage userStorage;
+
+    private final UserStorage userStorage;
     int idOfAll = 0;
 
     public int getIdOfAll() {
 
         return ++idOfAll;
-    }
-
-    public UserService(InMemoryUserStorage userStorage) {
-        this.userStorage = userStorage;
     }
 
     public void addToFriends(long idOfFirst, long idOfSecond) throws ValidationException {

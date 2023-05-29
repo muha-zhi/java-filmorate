@@ -1,14 +1,12 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.filmException.AbsentFilmWithThisIdException;
 import ru.yandex.practicum.filmorate.exception.filmException.FilmDateException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
@@ -20,20 +18,16 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FilmService {
-    @Autowired
-    FilmStorage filmStorage;
 
-    @Autowired
-    UserStorage userStorage;
-
-    LocalDate FILMS_BIRTHDAY = LocalDate.of(1895, 12, 28);
+    private final FilmStorage filmStorage;
 
 
-    public FilmService(InMemoryFilmStorage filmStorage, InMemoryUserStorage userStorage) {
-        this.filmStorage = filmStorage;
-        this.userStorage = userStorage;
-    }
+    private final UserStorage userStorage;
+
+    private final static LocalDate FILMS_BIRTHDAY = LocalDate.of(1895, 12, 28);
+
 
     int idOfAll = 0;
 
