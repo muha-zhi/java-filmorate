@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -12,16 +12,11 @@ import java.util.List;
 
 
 @RestController
+@RequiredArgsConstructor
 @Validated
 public class FilmController {
 
-
-    @Autowired
-    FilmService service;
-
-    public FilmController(FilmService service) {
-        this.service = service;
-    }
+    private final FilmService service;
 
 
     @PostMapping("/films")
