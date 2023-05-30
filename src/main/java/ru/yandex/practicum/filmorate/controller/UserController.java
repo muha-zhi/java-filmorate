@@ -22,12 +22,12 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public User createUser(@Valid @RequestBody User user) throws Exception {
+    public User createUser(@Valid @RequestBody User user) {
         return service.createUser(user);
     }
 
     @PutMapping("/users")
-    public User updateUser(@Valid @RequestBody User user) throws Exception {
+    public User updateUser(@Valid @RequestBody User user) {
         return service.updateUser(user);
     }
 

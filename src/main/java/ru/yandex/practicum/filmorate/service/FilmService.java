@@ -27,15 +27,13 @@ public class FilmService {
     private final UserStorage userStorage;
 
     private final LocalDate filmsBirthday = LocalDate.of(1895, 12, 28);
-
-
-    int idOfAll = 0;
+    public int idOfAll = 0;
 
     public int getIdOfAll() {
         return ++idOfAll;
     }
 
-    public Film createFilm(Film film) throws Exception {
+    public Film createFilm(Film film) {
         if (film != null) {
             isTrueFimDate(film);
             if (film.getId() == 0) {
@@ -52,7 +50,7 @@ public class FilmService {
     }
 
 
-    public Film updateFilm(Film film) throws Exception {
+    public Film updateFilm(Film film) {
         if (film != null) {
             isTrueFimDate(film);
             Film film1 = getFilmById(film.getId());
@@ -69,12 +67,13 @@ public class FilmService {
     }
 
     public Film getFilmById(long id) {
-        if (filmStorage.getFilmById(id) == null) {
+        final Film film = filmStorage.getFilmById(id);
+        if (film == null) {
             log.warn("Фильм с {} не найден", id);
             throw new AbsentFilmWithThisIdException("Фильм с id " + id + " не найден");
         }
         log.info("Фильм с {} найден", id);
-        return filmStorage.getFilmById(id);
+        return film;
     }
 
     public void delFilmById(long id) {
@@ -129,12 +128,13 @@ public class FilmService {
     }
 
     private User getUserById(long id) {
-        if (userStorage.getUserById(id) == null) {
+        final User user = userStorage.getUserById(id);
+        if (user == null) {
             log.warn("Пользователь с {} не найден", id);
             throw new AbsentFilmWithThisIdException("Пользователь с id " + id + " не найден");
         }
         log.info("Пользователь с {} найден", id);
-        return userStorage.getUserById(id);
+        return user;
     }
 
 }

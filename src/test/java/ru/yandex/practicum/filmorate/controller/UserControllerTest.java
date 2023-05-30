@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.exception.userException.InvalidBirthdayException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
@@ -15,7 +14,8 @@ import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 class UserControllerTest {
@@ -41,7 +41,7 @@ class UserControllerTest {
     }
 
     @Test
-    void findAll() throws Exception {
+    void findAll() {
         User user = getUser();
 
         controller.createUser(user);
@@ -50,7 +50,7 @@ class UserControllerTest {
 
 
     @Test
-    void createUser() throws Exception {
+    void createUser() {
 
         User user = getUser();
 
@@ -59,7 +59,7 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUser() throws Exception {
+    void updateUser() {
         User user = getUser();
         controller.createUser(user);
         assertEquals(1, controller.findAll().size());
@@ -77,11 +77,8 @@ class UserControllerTest {
     void shouldReturnInvalidBirthdayException() {
         User user = getUser();
         user.setBirthday(LocalDate.of(2025, 7, 12));
-        final InvalidBirthdayException exception = assertThrows(
-
-                InvalidBirthdayException.class,
-                () -> controller.createUser(user));
-        assertEquals("дата рождения не может быть в будущем", exception.getMessage());
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty());
     }
 
     @Test
@@ -101,7 +98,7 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldAddLoginInsteadNameIfNameIsNull() throws Exception {
+    void shouldAddLoginInsteadNameIfNameIsNull() {
         User user = getUser();
         user.setName("");
 

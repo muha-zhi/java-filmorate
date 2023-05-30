@@ -23,6 +23,8 @@ public class User {
     private String login;
 
     private String name;
+
+    @PastOrPresent(message = "дата рождения не может быть в будущем")
     @NotNull(message = "дата рождения не может быть пустым")
     private LocalDate birthday;
     @JsonIgnore

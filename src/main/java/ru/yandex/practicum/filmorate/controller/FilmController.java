@@ -20,7 +20,7 @@ public class FilmController {
 
 
     @PostMapping("/films")
-    public Film createFilm(@RequestBody @Valid Film film) throws Exception {
+    public Film createFilm(@RequestBody @Valid Film film) {
         return service.createFilm(film);
 
     }
@@ -31,7 +31,7 @@ public class FilmController {
     }
 
     @PutMapping("/films")
-    public Film updateFilm(@RequestBody @Valid Film film) throws Exception {
+    public Film updateFilm(@RequestBody @Valid Film film) {
         return service.updateFilm(film);
     }
 

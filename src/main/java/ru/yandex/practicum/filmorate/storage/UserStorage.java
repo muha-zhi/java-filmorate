@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface UserStorage {
 
-    User addUser(User user) throws Exception;
+    User addUser(User user);
 
     void delUserById(long id);
 
-    User updateUser(User user)throws Exception;
+    User updateUser(User user);
 
     User getUserById(long id);
 

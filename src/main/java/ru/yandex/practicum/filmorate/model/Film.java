@@ -18,8 +18,9 @@ public class Film {
 
     @EqualsAndHashCode.Include
     private long id;
-    @NotBlank(message = "{fieldName}: Имя не может быть пустым")
+    @NotBlank(message = "Имя не может быть пустым")
     private String name;
+    @NotNull(message = "Описание фильма не может быть пустым")
     @Size(max = 200, message = "максимальная длина описания — 200 символов")
     private String description;
     @NotNull(message = "Дата релиза не может быть пустым")

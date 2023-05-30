@@ -8,11 +8,11 @@ public interface FilmStorage {
 
     Film getFilmById(long id);
 
-    Film addFilm(Film film) throws Exception;
+    Film addFilm(Film film);
 
     void delFilmById(long id);
 
-    Film updateFilm(Film film) throws Exception;
+    Film updateFilm(Film film);
 
     List<Film> getAllFilms();
 }
