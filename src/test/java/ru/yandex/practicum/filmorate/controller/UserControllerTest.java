@@ -3,37 +3,45 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.exception.userException.InvalidBirthdayException;
-import ru.yandex.practicum.filmorate.exception.userException.InvalidEmailException;
-import ru.yandex.practicum.filmorate.exception.userException.InvalidLogUserException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 class UserControllerTest {
-    UserController controller;
+    private UserController controller;
+
+    private Validator validator;
 
     User getUser() {
-        return User.builder()
-                .id(1)
-                .login("Logan123")
-                .name("Логан")
-                .email("logan@gmail.com")
-                .birthday(LocalDate.of(2003, 7, 12))
-                .build();
+        User user = new User();
+        user.setId(1);
+        user.setLogin("Logan");
+        user.setEmail("logan@gmail.com");
+        user.setName("Логан");
+        user.setBirthday(LocalDate.of(2003, 7, 12));
+        return user;
     }
 
     @BeforeEach
     void beforeEach() {
-        controller = new UserController();
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+        controller = new UserController(new UserService(new InMemoryUserStorage()));
     }
 
     @Test
-    void findAll() throws Exception {
+    void findAll() {
         User user = getUser();
 
         controller.createUser(user);
@@ -42,7 +50,7 @@ class UserControllerTest {
 
 
     @Test
-    void createUser() throws Exception {
+    void createUser() {
 
         User user = getUser();
 
@@ -51,19 +59,14 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUser() throws Exception {
+    void updateUser() {
         User user = getUser();
         controller.createUser(user);
         assertEquals(1, controller.findAll().size());
         assertEquals(user, controller.findAll().get(0));
 
-        User user2 = User.builder()
-                .id(1)
-                .login("Logan123")
-                .name("Ванда")
-                .email("vanda@gmail.com")
-                .birthday(LocalDate.of(2003, 7, 12))
-                .build();
+        User user2 = getUser();
+        user2.setEmail("vanda@gmail.com");
         controller.updateUser(user2);
         assertEquals(1, controller.findAll().size());
         assertEquals(user2, controller.findAll().get(0));
@@ -72,60 +75,32 @@ class UserControllerTest {
 
     @Test
     void shouldReturnInvalidBirthdayException() {
-        User user = User.builder()
-                .id(1)
-                .login("Logan")
-                .name("Логан")
-                .email("logan@gmail.com")
-                .birthday(LocalDate.of(2025, 7, 12))
-                .build();
-        final InvalidBirthdayException exception = assertThrows(
-
-                InvalidBirthdayException.class,
-                () -> controller.createUser(user));
-        assertEquals("дата рождения не может быть в будущем", exception.getMessage());
+        User user = getUser();
+        user.setBirthday(LocalDate.of(2025, 7, 12));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty());
     }
 
     @Test
     void shouldReturnInvalidEmailException() {
-        User user = User.builder()
-                .id(1)
-                .login("Logan")
-                .name("Логан")
-                .email("logangmail.com")
-                .birthday(LocalDate.of(2003, 7, 12))
-                .build();
-        final InvalidEmailException exception = assertThrows(
-
-                InvalidEmailException.class,
-                () -> controller.createUser(user));
-        assertEquals("электронная почта не может быть пустой и должна содержать символ @", exception.getMessage());
+        User user = getUser();
+        user.setEmail("logangmail.com");
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty());
     }
 
     @Test
     void shouldReturnInvalidLogUserException() {
-        User user = User.builder()
-                .id(1)
-                .login("")
-                .name("Логан")
-                .email("logan@gmail.com")
-                .birthday(LocalDate.of(2003, 7, 12))
-                .build();
-        final InvalidLogUserException exception = assertThrows(
-
-                InvalidLogUserException.class,
-                () -> controller.createUser(user));
-        assertEquals("логин не может быть пустым и содержать пробелы", exception.getMessage());
+        User user = getUser();
+        user.setLogin("");
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty());
     }
 
     @Test
-    void shouldAddLoginInsteadNameIfNameIsNull() throws Exception {
-        User user = User.builder()
-                .id(1)
-                .login("Logan")
-                .email("logan@gmail.com")
-                .birthday(LocalDate.of(2003, 7, 12))
-                .build();
+    void shouldAddLoginInsteadNameIfNameIsNull() {
+        User user = getUser();
+        user.setName("");
 
         controller.createUser(user);
         User user2 = controller.findAll().get(0);
