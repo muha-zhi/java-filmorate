@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Data
 public class User {
-
+    @JsonIgnore
     @EqualsAndHashCode.Include
     private long id;
 

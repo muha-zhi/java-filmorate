@@ -1,8 +1,9 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -30,8 +31,12 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void delUserById(long id) {
+    public boolean delUserById(long id) {
         users.remove(id);
+        if(users.containsKey(id)){
+            return false;
+        }
+        return true;
     }
 
     @Override

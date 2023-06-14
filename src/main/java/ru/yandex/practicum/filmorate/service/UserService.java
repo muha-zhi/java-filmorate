@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.userException.AbsentUserWithThisIdException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -16,14 +17,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-
+    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
-    public int idOfAll = 0;
 
-    public int getIdOfAll() {
 
-        return ++idOfAll;
-    }
+
 
     public void addToFriends(long idOfFirst, long idOfSecond) {
         User firstUser = getUserById(idOfFirst);
@@ -73,9 +71,6 @@ public class UserService {
 
                 user.setName(user.getLogin());
             }
-            if (user.getId() == 0) {
-                user.setId(getIdOfAll());
-            }
             log.info("Пользватель с id {} создан {}", user.getId(), user);
             return userStorage.addUser(user);
 
@@ -120,6 +115,15 @@ public class UserService {
                     .collect(Collectors.toList());
         }
 
+    }
+
+    public boolean delUserById(long id){
+        User user = userStorage.getUserById(id);
+        if (user == null) {
+            throw new AbsentUserWithThisIdException("пользватель с id " + id + " не найден");
+        } else {
+            return userStorage.delUserById(id);
+        }
     }
 
 

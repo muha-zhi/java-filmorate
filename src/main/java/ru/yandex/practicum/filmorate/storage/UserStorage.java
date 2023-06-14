@@ -8,7 +8,7 @@ public interface UserStorage {
 
     User addUser(User user);
 
-    void delUserById(long id);
+    boolean delUserById(long id);
 
     User updateUser(User user);
 

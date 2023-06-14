@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.minidev.json.annotate.JsonIgnore;
@@ -16,7 +15,7 @@ import java.util.Set;
 
 @Data
 public class Film {
-
+    @JsonIgnore
     @EqualsAndHashCode.Include
     private long id;
     @NotBlank(message = "Имя не может быть пустым")
@@ -28,6 +27,8 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "продолжительность фильма должна быть положительной")
     private int duration;
+    @NotNull(message = "Жанр фильма не может быть пустым")
+    private int genre;
     @JsonIgnore
     private Set<Long> likesOfUsers = new HashSet<>();
 

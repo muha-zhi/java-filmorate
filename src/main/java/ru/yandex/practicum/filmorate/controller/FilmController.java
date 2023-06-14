@@ -58,5 +58,10 @@ public class FilmController {
         return service.getFilmById(id);
     }
 
+    @DeleteMapping("/films/{id}")
+    public void delFilmById(@PathVariable long id){
+        service.delFilmById(id);
+    }
+
 
 }

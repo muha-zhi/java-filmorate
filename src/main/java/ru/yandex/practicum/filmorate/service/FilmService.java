@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.filmException.AbsentFilmWithThisIdException;
 import ru.yandex.practicum.filmorate.exception.filmException.FilmDateException;
@@ -20,26 +21,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class FilmService {
-
+    @Qualifier("filmDbStorage")
     private final FilmStorage filmStorage;
 
-
+    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
 
     private final LocalDate filmsBirthday = LocalDate.of(1895, 12, 28);
-    public int idOfAll = 0;
-
-    public int getIdOfAll() {
-        return ++idOfAll;
-    }
 
     public Film createFilm(Film film) {
         if (film != null) {
             isTrueFimDate(film);
-            if (film.getId() == 0) {
-                film.setId(getIdOfAll());
-            }
-
             if (filmStorage.getFilmById(film.getId()) != null) {
                 log.info("Создан фильм с id {}   {}", film.getId(), film);
             }
