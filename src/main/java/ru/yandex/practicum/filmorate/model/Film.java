@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.validation.constraints.NotBlank;
@@ -9,11 +11,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Film {
     @JsonIgnore
     @EqualsAndHashCode.Include
@@ -27,14 +30,12 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "продолжительность фильма должна быть положительной")
     private int duration;
-    @NotNull(message = "Жанр фильма не может быть пустым")
-    private int genre;
-    @JsonIgnore
-    private Set<Long> likesOfUsers = new HashSet<>();
 
-    public int getLikes() {
+    private List<Genre> genres;
 
-        return likesOfUsers.size();
+    private Mpa mpa;
 
-    }
+    private int rate;
+
+
 }

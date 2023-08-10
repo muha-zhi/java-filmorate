@@ -3,14 +3,14 @@ package ru.yandex.practicum.filmorate.storage.impl.dao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,11 +26,20 @@ public class UserDbStorage implements UserStorage {
         String sql = "INSERT INTO users(name, login, email, birthday) " +
                 "values (?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql,
-                user.getName(),
-                user.getLogin(),
-                user.getEmail(),
-                user.getBirthday());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getLogin());
+            ps.setString(3, user.getEmail());
+            ps.setDate(4, Date.valueOf(user.getBirthday()));
+            return ps;
+        }, keyHolder);
+
+        int id = keyHolder.getKey().intValue();
+
+        user.setId(id);
 
         return user;
     }
@@ -46,6 +55,7 @@ public class UserDbStorage implements UserStorage {
     public User updateUser(User user) {
         String sql = "UPDATE users SET name = ?, login = ?, email = ?, birthday = ? " +
                 "WHERE user_id = ?";
+
 
         jdbcTemplate.update(sql,
                 user.getName(),
@@ -63,15 +73,11 @@ public class UserDbStorage implements UserStorage {
         SqlRowSet userRows = jdbcTemplate.queryForRowSet("SELECT * FROM users WHERE user_id = ?", id);
         if (userRows.next()) {
             User user = new User();
-            user.setId(userRows.getInt("user_id"));
+            user.setId(id);
             user.setName(userRows.getString("name"));
             user.setLogin(userRows.getString("login"));
             user.setEmail(userRows.getString("email"));
-            LocalDate birthday = Objects.requireNonNull(userRows.getDate("birthday")).toLocalDate();
-            if (birthday != null) {
-                user.setBirthday(Objects.requireNonNull(userRows.getDate("birthday")).toLocalDate());
-            }
-
+            user.setBirthday(Objects.requireNonNull(userRows.getDate("birthday")).toLocalDate());
             log.info("Найден пользователь: {} {}", user.getId(), user.getName());
 
             return user;
@@ -85,6 +91,11 @@ public class UserDbStorage implements UserStorage {
     public List<User> getUsers() {
         String sql = "select * from users";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs));
+    }
+
+    @Override
+    public void delAllUsers() {
+        jdbcTemplate.update("DELETE FROM users");
     }
 
     public User makeUser(ResultSet rs) throws SQLException {

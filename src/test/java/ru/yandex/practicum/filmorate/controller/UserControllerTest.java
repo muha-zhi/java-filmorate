@@ -3,9 +3,11 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.impl.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.impl.dao.FriendDbStorage;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -37,7 +39,7 @@ class UserControllerTest {
     void beforeEach() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        controller = new UserController(new UserService(new InMemoryUserStorage()));
+        controller = new UserController(new UserService(new InMemoryUserStorage(), new FriendDbStorage(new JdbcTemplate())));
     }
 
     @Test

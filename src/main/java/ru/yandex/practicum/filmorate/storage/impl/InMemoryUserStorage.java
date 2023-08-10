@@ -13,11 +13,23 @@ import java.util.Map;
 @Component
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
+
+    private final Map<Long, User> users = new Hashtable<>();
+    private long id = 0;
+
+    private long getId() {
+        return ++id;
+    }
+
+    @Override
     public List<User> getUsers() {
         return new ArrayList<>(users.values());
     }
 
-    private final Map<Long, User> users = new Hashtable<>();
+    @Override
+    public void delAllUsers() {
+        users.clear();
+    }
 
     @Override
     public User getUserById(long id) {
@@ -33,10 +45,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public boolean delUserById(long id) {
         users.remove(id);
-        if(users.containsKey(id)){
-            return false;
-        }
-        return true;
+        return !users.containsKey(id);
     }
 
     @Override

@@ -6,15 +6,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.filmException.AbsentFilmWithThisIdException;
 import ru.yandex.practicum.filmorate.exception.filmException.FilmDateException;
+import ru.yandex.practicum.filmorate.exception.genreException.AbsentGenreWithThisIdException;
+import ru.yandex.practicum.filmorate.exception.mpaException.AbsentMpaWithThisIdException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.*;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,19 +25,26 @@ import java.util.stream.Collectors;
 public class FilmService {
     @Qualifier("filmDbStorage")
     private final FilmStorage filmStorage;
-
     @Qualifier("userDbStorage")
     private final UserStorage userStorage;
+    @Qualifier("mpaDbStorage")
+    private final MpaStorage mpaStorage;
+    @Qualifier("likeDbStorage")
+    private final LikeStorage likeStorage;
+    @Qualifier("genreDbStorage")
+    private final GenreStorage genreStorage;
+
 
     private final LocalDate filmsBirthday = LocalDate.of(1895, 12, 28);
 
     public Film createFilm(Film film) {
         if (film != null) {
             isTrueFimDate(film);
-            if (filmStorage.getFilmById(film.getId()) != null) {
+            if (filmStorage.getFilmById(film.getId()) == null) {
                 log.info("Создан фильм с id {}   {}", film.getId(), film);
+                return filmStorage.addFilm(film);
             }
-            return filmStorage.addFilm(film);
+            log.warn("Уже сущестует фильм с id {}   {}", film.getId(), film);
         }
         return null;
 
@@ -48,7 +57,6 @@ public class FilmService {
             Film film1 = getFilmById(film.getId());
             log.info("Обновлен фильм с id {}", film1);
             return filmStorage.updateFilm(film);
-
         }
         return null;
     }
@@ -70,39 +78,33 @@ public class FilmService {
 
     public void delFilmById(long id) {
         getFilmById(id);
-
         filmStorage.delFilmById(id);
         log.info("Фильм с {} удален", id);
     }
 
     public void addLikeToFilm(long idOfFilm, long idOfUser) {
-        Film film = getFilmById(idOfFilm);
-        User user = getUserById(idOfUser);
-        Set<Long> likes = film.getLikesOfUsers();
-        if (likes != null) {
-
-            likes.add(user.getId());
-            log.info("Пользователь с ID " + idOfUser + " поставил лайк фильму с ID " + idOfFilm);
-        }
+        getUserById(idOfUser);
+        getFilmById(idOfFilm);
+        likeStorage.addLike(idOfUser, idOfFilm);
+        log.info("Пользватель с ID {} поставил лайк фильму c ID {}", idOfUser, idOfFilm);
 
     }
 
-    public Film removeLikeToFilm(long idOfFilm, long idOfUser) {
-        Film film = getFilmById(idOfFilm);
-        User user = getUserById(idOfUser);
-        film.getLikesOfUsers().remove(user.getId());
+    public void removeLikeToFilm(long idOfFilm, long idOfUser) {
+        getUserById(idOfUser);
+        getFilmById(idOfFilm);
+        likeStorage.removeLike(idOfFilm, idOfUser);
         log.info("Пользователь с ID {} удалил лайк у фильма с ID {}", idOfUser, idOfFilm);
-        return film;
+
     }
 
     public List<Film> getMostPopFilms(int from) {
         List<Film> allFilms = filmStorage.getAllFilms();
-
         if (allFilms != null) {
             int min = Math.min(from, allFilms.size());
-            log.info("Выполнен на получение самых популярных фильмов {}", allFilms);
+            log.info("Выполнен запрос на получение самых популярных фильмов {}", allFilms);
             return allFilms.stream()
-                    .sorted(Comparator.comparing(Film::getLikes).reversed())
+                    .sorted(Comparator.comparing((Film f) -> likeStorage.getCountLikesOfFilm(f.getId())).reversed())
                     .limit(min)
                     .collect(Collectors.toList());
 
@@ -127,6 +129,48 @@ public class FilmService {
         }
         log.info("Пользователь с {} найден", id);
         return user;
+    }
+
+    public Mpa getMpaById(long id) {
+        Mpa mpa = mpaStorage.getMpaById(id);
+        if (mpa == null) {
+            log.warn("MPA с id {} не найден", id);
+            throw new AbsentMpaWithThisIdException("MPA с id " + id + " не найден");
+        }
+        log.info("MPA с id {} найден", id);
+        return mpaStorage.getMpaById(id);
+    }
+
+    public void addMpa(Mpa mpa) {
+        mpaStorage.addMpa(mpa);
+        log.info("Был добвлен MPA ID - {}, NAME - {}", mpa.getId(), mpa.getName());
+    }
+
+    public void delMpaById(long id) {
+        getMpaById(id);
+        mpaStorage.delMpaById(id);
+        log.info("MPA c ID {} удален", id);
+    }
+
+    public List<Mpa> getAllMpa() {
+        log.info("Выполнен запрос на получение всех рейтингов");
+        return mpaStorage.getAllMpa();
+    }
+
+    public Genre getGenreById(long id) {
+        Genre genre = genreStorage.getGenreById(id);
+        if (genre != null) {
+            log.info("Жанр '{}' с id {} - найден", genre.getName(), genre.getId());
+            return genre;
+        } else {
+            throw new AbsentGenreWithThisIdException("Жанр с id " + id + " - не найден");
+        }
+
+    }
+
+    public List<Genre> getAllGenres() {
+        log.info("Выполнен запрос на получение всех рейтингов");
+        return genreStorage.getAllGenre();
     }
 
 }
