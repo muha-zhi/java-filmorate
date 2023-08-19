@@ -20,7 +20,6 @@ public class FilmController {
 
     private final FilmService service;
 
-
     @PostMapping("/films")
     public Film createFilm(@RequestBody @Valid Film film) {
         return service.createFilm(film);
