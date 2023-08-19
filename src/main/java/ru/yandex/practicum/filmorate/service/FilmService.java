@@ -13,7 +13,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.*;
-
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class FilmService {
+
     @Qualifier("filmDbStorage")
     private final FilmStorage filmStorage;
     @Qualifier("userDbStorage")
@@ -33,7 +33,6 @@ public class FilmService {
     private final LikeStorage likeStorage;
     @Qualifier("genreDbStorage")
     private final GenreStorage genreStorage;
-
 
     private final LocalDate filmsBirthday = LocalDate.of(1895, 12, 28);
 
@@ -95,7 +94,6 @@ public class FilmService {
         getFilmById(idOfFilm);
         likeStorage.removeLike(idOfFilm, idOfUser);
         log.info("Пользователь с ID {} удалил лайк у фильма с ID {}", idOfUser, idOfFilm);
-
     }
 
     public List<Film> getMostPopFilms(int from) {
@@ -172,5 +170,4 @@ public class FilmService {
         log.info("Выполнен запрос на получение всех рейтингов");
         return genreStorage.getAllGenre();
     }
-
 }

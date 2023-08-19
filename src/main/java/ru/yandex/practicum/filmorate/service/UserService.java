@@ -137,6 +137,4 @@ public class UserService {
             return userStorage.delUserById(id);
         }
     }
-
-
 }

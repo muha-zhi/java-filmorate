@@ -96,5 +96,4 @@ public class FilmController {
         return service.getGenreById(id);
     }
 
-
 }

@@ -10,13 +10,13 @@ import ru.yandex.practicum.filmorate.exception.filmException.AbsentFilmWithThisI
 import ru.yandex.practicum.filmorate.exception.genreException.AbsentGenreWithThisIdException;
 import ru.yandex.practicum.filmorate.exception.mpaException.AbsentMpaWithThisIdException;
 import ru.yandex.practicum.filmorate.exception.userException.AbsentUserWithThisIdException;
-
 import javax.validation.ConstraintViolationException;
 import java.util.Map;
 
 @RestControllerAdvice("ru.yandex.practicum.filmorate.controller")
 @Slf4j
 public class ErrorHandler {
+
 
     @ExceptionHandler({AbsentFilmWithThisIdException.class,
             AbsentUserWithThisIdException.class,
