@@ -4,6 +4,7 @@ Template repository for Filmorate project.
 
 # Схема базы данных
 
+
 ![Схема базы данных](DB_2.0.png)
 
 # В этой схеме используются следующие таблицы:
