@@ -71,7 +71,6 @@ public class FilmController {
 
     @PostMapping("/mpa")
     public void createRating(@RequestBody @Valid Mpa rating) {
-        Mpa rating1 = rating;
         service.addMpa(rating);
     }
 
