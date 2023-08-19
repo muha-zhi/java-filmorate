@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.*;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -25,12 +26,16 @@ public class FilmService {
 
     @Qualifier("filmDbStorage")
     private final FilmStorage filmStorage;
+
     @Qualifier("userDbStorage")
     private final UserStorage userStorage;
+
     @Qualifier("mpaDbStorage")
     private final MpaStorage mpaStorage;
+
     @Qualifier("likeDbStorage")
     private final LikeStorage likeStorage;
+
     @Qualifier("genreDbStorage")
     private final GenreStorage genreStorage;
 

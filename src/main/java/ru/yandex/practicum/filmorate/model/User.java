@@ -22,7 +22,7 @@ public class User {
     @NotEmpty(message = "Пустое поле Email")
     @Email(message = "Почта не соответсвует формату email")
     private String email;
-  
+
     @NotBlank(message = "логин не может быть пустым и содержать пробелы")
     @Pattern(regexp = "^\\w+$", message = "логин не может быть пустым и содержать пробелы")
     private String login;

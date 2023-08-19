@@ -19,6 +19,7 @@ public class UserService {
 
     @Qualifier("userDbStorage")
     private final UserStorage userStorage;
+
     @Qualifier("friendDbStorage")
     private final FriendStorage friendStorage;
 
