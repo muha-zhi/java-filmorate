@@ -18,16 +18,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Film {
+
     @JsonIgnore
     @EqualsAndHashCode.Include
     private long id;
+
     @NotBlank(message = "Имя не может быть пустым")
     private String name;
+
     @NotNull(message = "Описание фильма не может быть пустым")
     @Size(max = 200, message = "максимальная длина описания — 200 символов")
     private String description;
+
     @NotNull(message = "Дата релиза не может быть пустым")
     private LocalDate releaseDate;
+
     @Positive(message = "продолжительность фильма должна быть положительной")
     private int duration;
 
@@ -36,6 +41,5 @@ public class Film {
     private Mpa mpa;
 
     private int rate;
-
-
+    
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Genre {
+
     @EqualsAndHashCode.Include
     private final long id;
 

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class Mpa {
 
-
     @EqualsAndHashCode.Include
     private final long id;
 
