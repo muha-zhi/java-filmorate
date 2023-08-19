@@ -12,22 +12,22 @@ import java.util.stream.Collectors;
 @Component
 public class InMemoryFilmGenreStorage implements FilmGenreStorage {
 
-    private final List<FilmGenre> FG = new ArrayList<>();
+    private final List<FilmGenre> filmGenres = new ArrayList<>();
 
     @Override
     public void addFG(long idOfFilm, long idOfGenre) {
-        FG.add(new FilmGenre(idOfFilm, idOfGenre));
+        filmGenres.add(new FilmGenre(idOfFilm, idOfGenre));
 
     }
 
     @Override
     public void delFG(long idOfFilm, long idOfGenre) {
-        FG.removeIf(fg -> fg.getFilmId() == idOfFilm && fg.getGenreId() == idOfGenre);
+        filmGenres.removeIf(fg -> fg.getFilmId() == idOfFilm && fg.getGenreId() == idOfGenre);
     }
 
     @Override
     public List<Genre> getAllGenForFilm(long filmId) {
-        return FG.stream()
+        return filmGenres.stream()
                 .filter((FilmGenre fg) -> fg.getFilmId() == filmId)
                 .map(fg -> new Genre(fg.getGenreId()))
                 .collect(Collectors.toList());
@@ -35,8 +35,8 @@ public class InMemoryFilmGenreStorage implements FilmGenreStorage {
 
     @Override
     public void updateGenresOfFilm(long filmId, List<Genre> genres) {
-        FG.removeIf(fg -> fg.getFilmId() == filmId);
-        FG.addAll(genres.stream()
+        filmGenres.removeIf(fg -> fg.getFilmId() == filmId);
+        filmGenres.addAll(genres.stream()
                 .map(g -> new FilmGenre(filmId, g.getId()))
                 .collect(Collectors.toList()));
     }
