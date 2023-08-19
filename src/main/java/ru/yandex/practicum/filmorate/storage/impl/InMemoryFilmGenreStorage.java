@@ -14,10 +14,9 @@ public class InMemoryFilmGenreStorage implements FilmGenreStorage {
 
     private final List<FilmGenre> FG = new ArrayList<>();
 
-
     @Override
     public void addFG(long idOfFilm, long idOfGenre) {
-          FG.add(new FilmGenre(idOfFilm, idOfGenre));
+        FG.add(new FilmGenre(idOfFilm, idOfGenre));
 
     }
 

@@ -3,11 +3,10 @@ package ru.yandex.practicum.filmorate.storage;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 @Component
 public interface MpaStorage {
+
     void addMpa(Mpa rating);
 
     Mpa getMpaById(long id);

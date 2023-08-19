@@ -11,6 +11,7 @@ import java.util.List;
 @Component
 @Slf4j
 public class InMemoryLikeStorage implements LikeStorage {
+
     private final List<Like> likes = new ArrayList<>();
     private long id = 0;
 

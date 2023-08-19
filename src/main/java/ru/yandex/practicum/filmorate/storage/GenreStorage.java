@@ -7,6 +7,7 @@ import java.util.List;
 
 @Component
 public interface GenreStorage {
+
     void addGenre(Genre genre);
 
     Genre getGenreById(long id);
