@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserStorageDbTest {
-    private final UserDbStorage userDbStorage;
 
+    private final UserDbStorage userDbStorage;
 
     User getUser() {
         User user = new User();

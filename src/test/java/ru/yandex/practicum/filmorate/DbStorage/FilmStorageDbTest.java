@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmStorageDbTest {
+
     private final FilmDbStorage filmDbStorage;
 
 

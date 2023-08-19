@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 class UserControllerTest {
+
     private UserController controller;
 
     private Validator validator;
