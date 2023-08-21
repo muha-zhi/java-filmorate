@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
@@ -63,35 +61,4 @@ public class FilmController {
     public void delFilmById(@PathVariable long id) {
         service.delFilmById(id);
     }
-
-    @GetMapping("/mpa/{id}")
-    public Mpa getRatingById(@PathVariable long id) {
-        return service.getMpaById(id);
-    }
-
-    @PostMapping("/mpa")
-    public void createRating(@RequestBody @Valid Mpa rating) {
-        service.addMpa(rating);
-    }
-
-    @GetMapping("/mpa")
-    public List<Mpa> getAllRating() {
-        return service.getAllMpa();
-    }
-
-    @DeleteMapping("/mpa/{id}")
-    public void delRatingById(@PathVariable long id) {
-        service.delMpaById(id);
-    }
-
-    @GetMapping("/genres")
-    public List<Genre> getAllGenres() {
-        return service.getAllGenres();
-    }
-
-    @GetMapping("/genres/{id}")
-    public Genre getGenreById(@PathVariable long id) {
-        return service.getGenreById(id);
-    }
-
 }

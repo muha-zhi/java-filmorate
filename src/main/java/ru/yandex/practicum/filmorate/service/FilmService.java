@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.filmException.AbsentFilmWithThisIdException;
+import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.exception.filmException.FilmDateException;
-import ru.yandex.practicum.filmorate.exception.genreException.AbsentGenreWithThisIdException;
-import ru.yandex.practicum.filmorate.exception.mpaException.AbsentMpaWithThisIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -70,7 +68,7 @@ public class FilmService {
         final Film film = filmStorage.getFilmById(id);
         if (film == null) {
             log.warn("Фильм с {} не найден", id);
-            throw new AbsentFilmWithThisIdException("Фильм с id " + id + " не найден");
+            throw new DataNotFoundException("Фильм с id " + id + " не найден");
         }
         log.info("Фильм с {} найден", id);
         return film;
@@ -124,7 +122,7 @@ public class FilmService {
         final User user = userStorage.getUserById(id);
         if (user == null) {
             log.warn("Пользователь с {} не найден", id);
-            throw new AbsentFilmWithThisIdException("Пользователь с id " + id + " не найден");
+            throw new DataNotFoundException("Пользователь с id " + id + " не найден");
         }
         log.info("Пользователь с {} найден", id);
         return user;
@@ -134,7 +132,7 @@ public class FilmService {
         Mpa mpa = mpaStorage.getMpaById(id);
         if (mpa == null) {
             log.warn("MPA с id {} не найден", id);
-            throw new AbsentMpaWithThisIdException("MPA с id " + id + " не найден");
+            throw new DataNotFoundException("MPA с id " + id + " не найден");
         }
         log.info("MPA с id {} найден", id);
         return mpaStorage.getMpaById(id);
@@ -162,9 +160,8 @@ public class FilmService {
             log.info("Жанр '{}' с id {} - найден", genre.getName(), genre.getId());
             return genre;
         } else {
-            throw new AbsentGenreWithThisIdException("Жанр с id " + id + " - не найден");
+            throw new DataNotFoundException("Жанр с id " + id + " - не найден");
         }
-
     }
 
     public List<Genre> getAllGenres() {

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.userException.AbsentUserWithThisIdException;
+import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -29,10 +29,10 @@ public class UserService {
         User friend = userStorage.getUserById(idFriend);
         if (user == null) {
             log.warn("пользватель с id {} не найден", idOfUser);
-            throw new AbsentUserWithThisIdException("пользватель с id " + idOfUser + " не найден");
+            throw new DataNotFoundException("пользватель с id " + idOfUser + " не найден");
         } else if (friend == null) {
             log.warn("пользватель с id {} не найден", idFriend);
-            throw new AbsentUserWithThisIdException("пользватель с id " + idFriend + " не найден");
+            throw new DataNotFoundException("пользватель с id " + idFriend + " не найден");
         } else {
             friendStorage.addFriend(idFriend, idOfUser);
         }
@@ -43,10 +43,10 @@ public class UserService {
         User friend = userStorage.getUserById(idOfFriend);
         if (user == null) {
             log.warn("пользватель с id {} не найден", idOfUser);
-            throw new AbsentUserWithThisIdException("пользватель с id " + idOfUser + " не найден");
+            throw new DataNotFoundException("пользватель с id " + idOfUser + " не найден");
         } else if (friend == null) {
             log.warn("пользватель с id {} не найден", idOfFriend);
-            throw new AbsentUserWithThisIdException("пользватель с id " + idOfFriend + " не найден");
+            throw new DataNotFoundException("пользватель с id " + idOfFriend + " не найден");
         } else {
             friendStorage.removeFriendById(idOfFriend, idOfUser);
         }
@@ -58,10 +58,10 @@ public class UserService {
 
         if (firstUser == null) {
             log.warn("пользватель с id {} не найден", idOfFirst);
-            throw new AbsentUserWithThisIdException("пользватель с id " + idOfFirst + " не найден");
+            throw new DataNotFoundException("пользватель с id " + idOfFirst + " не найден");
         } else if (secondUser == null) {
             log.warn("пользватель с id {} не найден", idOfSecond);
-            throw new AbsentUserWithThisIdException("пользватель с id " + idOfSecond + " не найден");
+            throw new DataNotFoundException("пользватель с id " + idOfSecond + " не найден");
         } else {
 
             List<User> firstUserFriends = friendStorage.getAllFriendOfUser(idOfFirst);
@@ -112,7 +112,7 @@ public class UserService {
         if (id != 0) {
             if (userStorage.getUserById(id) == null) {
                 log.warn("пользватель с id {} не найден", id);
-                throw new AbsentUserWithThisIdException("пользватель с id " + id + " не найден");
+                throw new DataNotFoundException("пользватель с id " + id + " не найден");
             } else {
                 return userStorage.getUserById(id);
             }
@@ -123,7 +123,7 @@ public class UserService {
     public List<User> getMyFriends(long id) {
         User user = userStorage.getUserById(id);
         if (user == null) {
-            throw new AbsentUserWithThisIdException("пользватель с id " + id + " не найден");
+            throw new DataNotFoundException("пользватель с id " + id + " не найден");
         } else {
             return friendStorage.getAllFriendOfUser(id);
         }
@@ -133,7 +133,7 @@ public class UserService {
     public boolean delUserById(long id) {
         User user = userStorage.getUserById(id);
         if (user == null) {
-            throw new AbsentUserWithThisIdException("пользватель с id " + id + " не найден");
+            throw new DataNotFoundException("пользватель с id " + id + " не найден");
         } else {
             return userStorage.delUserById(id);
         }

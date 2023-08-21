@@ -103,7 +103,7 @@ public class FilmDbStorage implements FilmStorage {
         List<Genre> genres = film.getGenres();
         if (genres != null) {
             for (Genre g : genres) {
-                filmGenreDbStorage.addFG(id, g.getId());
+                filmGenreDbStorage.addFilmGenre(id, g.getId());
             }
         }
 

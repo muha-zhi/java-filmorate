@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface FilmGenreStorage {
 
-    void addFG(long idOfFilm, long idOfGenre);
+    void addFilmGenre(long idOfFilm, long idOfGenre);
 
-    void delFG(long idOfFilm, long idOfGenre);
+    void delFilmGenre(long idOfFilm, long idOfGenre);
 
     List<Genre> getAllGenForFilm(long filmId);
 

@@ -28,7 +28,7 @@ public class FilmGenreDbStorage implements FilmGenreStorage {
 
 
     @Override
-    public void addFG(long idOfFilm, long idOfGenre) {
+    public void addFilmGenre(long idOfFilm, long idOfGenre) {
         if (!genreContOfFilm(idOfFilm, idOfGenre)) {
             String sql = "INSERT INTO " + FILM_GENRE_TABLE + " (" + FILM_GENRE_FILM_ID + ", " + FILM_GENRE_GENRE_ID + ")" +
                     " VALUES(?, ?)";
@@ -38,7 +38,7 @@ public class FilmGenreDbStorage implements FilmGenreStorage {
     }
 
     @Override
-    public void delFG(long idOfFilm, long idOfGenre) {
+    public void delFilmGenre(long idOfFilm, long idOfGenre) {
         String sql = "DELETE FROM " + FILM_GENRE_TABLE + " WHERE " + FILM_GENRE_FILM_ID + "  = ? AND " + FILM_GENRE_GENRE_ID + " = ?";
         jdbcTemplate.update(sql, idOfFilm, idOfGenre);
     }
@@ -62,24 +62,19 @@ public class FilmGenreDbStorage implements FilmGenreStorage {
         if (genres != null) {
             for (Genre g : genres) {
 
-                addFG(filmId, g.getId());
+                addFilmGenre(filmId, g.getId());
             }
         }
     }
 
     private Genre makeGenre(ResultSet rs) throws SQLException {
-        Genre genre = new Genre(rs.getInt("genre." + GENRE_ID), rs.getString("name"));
-        return genre;
+        return new Genre(rs.getInt("genre." + GENRE_ID), rs.getString("name"));
     }
 
     private boolean genreContOfFilm(long filmId, long genreId) {
         SqlRowSet filmRows = jdbcTemplate.queryForRowSet("SELECT * FROM " + FILM_GENRE_TABLE + " WHERE "
                 + FILM_GENRE_FILM_ID + " = ? AND " + FILM_GENRE_GENRE_ID + " = ?", filmId, genreId);
-        if (filmRows.next()) {
-            return true;
-        } else {
-            return false;
-        }
+        return filmRows.next();
     }
 
 }
