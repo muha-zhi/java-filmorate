@@ -18,7 +18,6 @@ public class FilmController {
 
     private final FilmService service;
 
-
     @PostMapping("/films")
     public Film createFilm(@RequestBody @Valid Film film) {
         return service.createFilm(film);
@@ -43,9 +42,9 @@ public class FilmController {
     }
 
     @DeleteMapping("/films/{id}/like/{userId}")
-    public Film delLikeFilm(@PathVariable long id,
+    public void delLikeFilm(@PathVariable long id,
                             @PathVariable long userId) {
-        return service.removeLikeToFilm(id, userId);
+        service.removeLikeToFilm(id, userId);
     }
 
     @GetMapping("/films/popular")
@@ -58,5 +57,8 @@ public class FilmController {
         return service.getFilmById(id);
     }
 
-
+    @DeleteMapping("/films/{id}")
+    public void delFilmById(@PathVariable long id) {
+        service.delFilmById(id);
+    }
 }

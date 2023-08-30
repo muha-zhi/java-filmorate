@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.filmorate.exception.filmException.AbsentFilmWithThisIdException;
-import ru.yandex.practicum.filmorate.exception.userException.AbsentUserWithThisIdException;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Map;
@@ -16,7 +14,8 @@ import java.util.Map;
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler({AbsentFilmWithThisIdException.class, AbsentUserWithThisIdException.class})
+
+    @ExceptionHandler({DataNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleNotFound(final RuntimeException e) {
         log.debug("Получен статус 404 NOT FOUND {}", e.getMessage(), e);
